@@ -1,0 +1,22 @@
+{
+    "name": "josecanciani/reactor",
+    "description": "Component based reactive framework",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Jose Canciani",
+            "email": "jose.canciani@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Reactor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Reactor\\Demo\\": "demo/src/"
+        }
+    },
+    "require": {}
+}
