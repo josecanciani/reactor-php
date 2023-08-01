@@ -15,10 +15,19 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Reactor\\Demo\\": "demo/src/"
+            "Reactor\\Demo\\": "demo/src/",
+            "Reactor\\Tests\\": "tests/"
         }
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5"
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit tests/**/*.php"
+        ],
+        "test-one": [
+            "vendor/bin/phpunit --"
+        ]
     }
 }
