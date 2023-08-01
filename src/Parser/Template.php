@@ -16,12 +16,16 @@ class Template implements \JsonSerializable {
         $this->htmlCode = $htmlCode;
     }
 
+    function getHtmlCode(): string {
+        return $this->htmlCode->getCode();
+    }
+
     function jsonSerialize() {
         return [
             'component' => $this->component,
             'jsCode' => $this->jsCode->getCode(),
             'cssCode' => $this->cssCode,
-            'htmlCode' => $this->htmlCode->getCode()
+            'htmlCode' => $this->getHtmlCode()
         ];
     }
 }

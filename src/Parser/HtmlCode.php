@@ -32,12 +32,17 @@ class HtmlCode {
         if (!$parent->hasChildNodes()) {
             return;
         }
-        foreach ($this->extractChilds($parent) as $child) {
+        $childs = $this->extractChilds($parent);
+        if (count($childs) === 1 && $childs[0]->nodeName === 'reactor') {
+            // found a pre-processed section, and it's the only child, so let's just append all childs to parent
+            // TODO: transfer section to parent?
+        }
+        foreach ($childs as $child) {
             if ($child instanceof \DOMText) {
                 $this->processTextNode($doc, $child, $parent);
             } else {
                 $newSectionDepth = $sectionDepth;
-                if ($child->nodeName === 'reactor') {
+                if ($child->nodeName === 'reactor-section') {
                     // our custom nodes, no need to process attributes
                     $newSectionDepth++;
                     $this->processReactorNode($child, $newSectionDepth);
@@ -51,7 +56,7 @@ class HtmlCode {
     }
 
     private function processReactorNode(\DOMElement $node, int $sectionDepth): void {
-        $node->setAttribute('depth', $sectionDepth);
+        $node->setAttribute('depth', (string) $sectionDepth);
     }
 
     /**
@@ -114,11 +119,11 @@ class HtmlCode {
                 $node->setAttribute('reactorProperties', implode(',', $variableAttributes));
             }
         }
-        if ($node->nodeName === 'reactor' || $variableAttributes) {
+        if ($node->nodeName === 'reactor-section' || $variableAttributes) {
             $this->serial++;
             $reactorId = 'reactorId_' . $this->serial;
             $node->setAttribute('class', trim($node->getAttribute('class') . ' ' . $reactorId));
-            $node->setAttribute('reactorId', $reactorId);
+            $node->setAttribute('reactor-id', $reactorId);
         }
     }
 
@@ -130,7 +135,10 @@ class HtmlCode {
             if (!($child instanceof \DOMElement || $child instanceof \DOMText)) {
                 throw new ParseError('Found HTML Node "' . get_class($child) . '", not supported');
             }
-            $childs[] = $child;
+            // remove empty text nodes
+            if ($child instanceof \DOMElement || trim($child->wholeText)) {
+                $childs[] = $child;
+            }
             $parent->removeChild($child);
         }
         return $childs;
@@ -154,8 +162,8 @@ class HtmlCode {
                 '/{{\s*(\/)\s*(\w+)\s*}}/i'
             ],
             [
-                '<reactor type="section" var="$2" op="$1">{{$1$2}}',
-                '{{$1$2}}</reactor>'
+                '<reactor-section var="$2" op="$1">{{$1$2}}',
+                '{{$1$2}}</reactor-section>'
             ],
             $html
         );

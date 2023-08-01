@@ -17,11 +17,11 @@ class DomDocument extends \DOMDocument {
             $this->loadHTML('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><?xml encoding="UTF-8"><html><body>' . $source . '</body></html>');
             foreach (libxml_get_errors() as $error) {
                 $message = trim($error->message);
-                if ($message === 'Tag reactor invalid') {
+                if ($message === 'Tag reactor-section invalid') {
                     // OK, we added <reactor> sections
                     continue;
                 }
-                if (trim($error->message) === 'Unexpected end tag : reactor') {
+                if (trim($error->message) === 'Unexpected end tag : reactor-section') {
                     throw new ParseError("Error parsing sections for \"$component\". Check they are properly nested and closed.");
                 }
                 throw new ParseError("LIBXML error when parsing component \"$component\": {$error->message}");

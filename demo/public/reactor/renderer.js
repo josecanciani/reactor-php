@@ -52,7 +52,7 @@ export class Renderer {
         for (const node of propertyNodes) {
             const attributes = node.getAttribute('reactorProperties').split(',');
             for (const attribute of attributes) {
-                node.setAttribute(attribute, template.renderNodeAttribute(attribute, node.getAttribute('reactorId'), vars));
+                node.setAttribute(attribute, template.renderNodeAttribute(attribute, node.getAttribute('reactor-id'), vars));
             }
         }
     }
