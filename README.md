@@ -1,5 +1,11 @@
 # reactor-php
 
+## DEPRECATION NOTICE
+
+**This project has been deprecated**. It's being replaced by FuseWire, check it out at https://github.com/josecanciani/fusewire 
+
+## Intro
+
 This is a PHP Backend for the Reactor project.
 
 ## Documentation
